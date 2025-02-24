@@ -28,22 +28,3 @@ exports.getLikesByTweet = async (req, res) => {
     res.status(500).json({ message: 'Server error' });
   }
 };
-
-// Remove a like from a tweet
-exports.unlikeTweet = async (req, res) => {
-  const { userId, tweetId } = req.params;
-
-  try {
-    const result = await pool.query(
-      'DELETE FROM "Like" WHERE userId = $1 AND tweetId = $2 RETURNING *',
-      [userId, tweetId]
-    );
-    if (result.rows.length === 0) {
-      return res.status(404).json({ message: 'Like not found' });
-    }
-    res.status(200).json({ message: 'Like removed' });
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ message: 'Server error' });
-  }
-};

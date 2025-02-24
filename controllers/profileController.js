@@ -3,17 +3,32 @@ const pool = require('../models/db');
 // Create a profile
 exports.createProfile = async (req, res) => {
   const { username, fullName, email, passwordHash, age, profession } = req.body;
+
   try {
+    // Check if username or email already exist in the database
+    const existingUser = await pool.query(
+      'SELECT 1 FROM "Profile" WHERE username = $1 OR email = $2 LIMIT 1',
+      [username, email]
+    );
+
+    if (existingUser.rows.length > 0) {
+      return res.status(400).json({ message: 'Username or Email already exists' });
+    }
+
+    // Insert new profile into the database
     const result = await pool.query(
       'INSERT INTO "Profile" (username, fullName, email, passwordHash, age, profession) VALUES ($1, $2, $3, $4, $5, $6) RETURNING *',
       [username, fullName, email, passwordHash, age, profession]
     );
+
+    // Return the newly created profile data
     res.status(201).json(result.rows[0]);
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: 'Server error' });
   }
 };
+
 
 // Get all profiles
 exports.getProfiles = async (req, res) => {

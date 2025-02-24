@@ -1,6 +1,6 @@
 const express = require('express');
 const dotenv = require('dotenv');
-const createTables = require('./initDb');  // Import the createTables function from initDb.js
+const setupSchema = require('./models/setupSchema');  // Import the setupSchema function from setupSchema.js
 
 // Import Routes
 const profileRoutes = require('./routes/profileRoutes');
@@ -13,7 +13,7 @@ const bookmarkRoutes = require('./routes/bookmarkRoutes');
 dotenv.config();
 
 // Initialize the database schema (Ensure tables exist before starting the server)
-createTables().then(() => {
+setupSchema().then(() => {
   const app = express();
 
   // Middleware
