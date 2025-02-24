@@ -8,6 +8,7 @@ const tweetRoutes = require('./routes/tweetRoutes');
 const replyRoutes = require('./routes/replyRoutes');
 const likeRoutes = require('./routes/likeRoutes');
 const bookmarkRoutes = require('./routes/bookmarkRoutes');
+const followRoutes = require('./routes/followRoutes'); 
 
 // Load environment variables
 dotenv.config();
@@ -25,6 +26,8 @@ setupSchema().then(() => {
   app.use('/replies', replyRoutes);
   app.use('/likes', likeRoutes);
   app.use('/bookmarks', bookmarkRoutes);
+  app.use('/follows', followRoutes);
+
 
   // Default route
   app.get('/', (req, res) => {
